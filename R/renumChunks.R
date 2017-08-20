@@ -9,7 +9,7 @@ renumChunks = function(fi, dummyRun = TRUE, backup = TRUE){
 
   chunkCounter = 0
 
-  handoutNumber = gsub("^(H(0[1-9]|1[0-7])(_[1-4])*)\\.Rnw$", "\\1", fi$fName)
+  handoutNumber = gsub("^(H(0[1-9]|1[0-9]|20))\\.Rnw$", "\\1", fi$fName)
 
   for(lineNum in chunkLines){
     line = Lines[lineNum]
@@ -24,7 +24,7 @@ renumChunks = function(fi, dummyRun = TRUE, backup = TRUE){
                                                     }, chunkCounter)
     chunkCounter = chunkCounter + 1
     ## remove any existing chunk label
-    pattern = paste0("RC-", handoutNumber, "-[0-9]{3}(, )*")
+    pattern ="(RC-(0[1-9]|1[0-9]|20)-[0-9]{3}|R[^,>]+)(, )*"
     if(grepl(pattern, chunkOptions)){
       r = regexpr(pattern, chunkOptions)
       tmp = regmatches(chunkOptions, r)
