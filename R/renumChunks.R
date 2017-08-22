@@ -1,4 +1,4 @@
-renumChunks = function(fi, dummyRun = TRUE, backup = TRUE, knitr = FALSE, labelStub = NULL){
+renumChunks = function(fi, dummyRun = TRUE, backup = TRUE, knitr = TRUE, labelStub = NULL){
   Lines = readLines(fi$fullName)
 
   if(backup){
@@ -20,25 +20,19 @@ renumChunks = function(fi, dummyRun = TRUE, backup = TRUE, knitr = FALSE, labelS
     chunkOptions = if(knitr){
       gsub("^<<([^>]*)>>=$", "\\1", line)
     }else{
-      gsub("^[`]{3}\\{r([^}]*)\\}$", line)
+      gsub("^[`]{3}\\{r([^}]*)\\}$", "\\1", line)
     }
 
     if(is.null(labelStub)){
       labelStub = paste0("RC-", handoutNumber, "-")
     }
-    chunkLabel = paste0(labelStub, if(chunkCounter < 10){
-                                     "00"
-                                   }else if (chunkCounter >=10 && chunkCounter < 100){
-                                     "0"
-                                   }else{
-                                     ""
-                                   }, chunkCounter)
+    chunkLabel = paste0(labelStub, str_pad(as.character(chunkCounter), width = 3, side = "left", pad = "0"))
     chunkCounter = chunkCounter + 1
     ## remove any existing chunk label
     pattern = if(knitr){
       "(RC-(0[1-9]|1[0-9]|20)-[0-9]{3}|R[^,>]+)(, )*"
     }else{
-      "(rc-cs[0-9]+[0-9]{3})(, )*"
+      "(rc-(cs[0-9]+)-[0-9]{3})(, )*"
     }
     if(grepl(pattern, chunkOptions)){
       r = regexpr(pattern, chunkOptions)
@@ -52,9 +46,9 @@ renumChunks = function(fi, dummyRun = TRUE, backup = TRUE, knitr = FALSE, labelS
     }
 
     chunkOptions = if(nchar(chunkOptions) > 0){
-                     paste0(chunkLabel, ", ", chunkOptions)
+                     paste0(toupper(chunkLabel), ", ", chunkOptions)
                    }else{
-                     chunkLabel
+                     toupper(chunkLabel)
                    }
 
     replacementLine = if(knitr){
