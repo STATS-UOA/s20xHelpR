@@ -1,3 +1,14 @@
+#' Renumber all the code chunks in an Sweave/Knitr file or an R Markdown file
+#'
+#' Given all the chunks a sequential unique ID
+#'
+#' @param fi an object of class \code{fileInfo}. See \code{\link{setFileNames}}.
+#' @param dummyRun if \code{FALSE} then the changes will be committed to disk as well as being displayed on screen. It is a good idea to do a dummy run first.
+#' @param backup if \code{TRUE} and \code{dummyRun} is \code{FALSE} then a backup file will be created with sequential numbering to stop over-writing existing backups.
+#' @param knitr if \code{TRUE} then knitr style code chunks are expected otherwise R Markdown code chunks are expected.
+#' @param labelStub used for specifying a bespoke label stub for each label. If it is not specified (default) then \code{RC-} and the handout number are used.
+#'
+#' @export
 renumChunks = function(fi, dummyRun = TRUE, backup = TRUE, knitr = TRUE, labelStub = NULL){
   Lines = readLines(fi$fullName)
 

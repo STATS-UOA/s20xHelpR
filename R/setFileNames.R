@@ -1,4 +1,14 @@
-setFileNames = function(i, root, handout = TRUE){
+#' Create an object of class fileInfo
+#'
+#' Create a variable which stores more detailed information about a file.
+#'
+#' @param i either a handout number or the name of the file you wish to work with.
+#' @param root the fully qualified path of the directory the file resides in.
+#' @param handout if \code{TRUE} then this function thinks you're working with a handout.
+#' @param knitr if \code{TRUE} then the file is a .Rnw file not a .Rmd file
+#'
+#' @export
+setFileNames = function(i, root, handout = TRUE, knitr = FALSE){
   part = path = fName = NULL
 
   if(handout){
@@ -19,7 +29,7 @@ setFileNames = function(i, root, handout = TRUE){
   }else{
     part = i
     path = paste0(root, "/")
-    fName = paste0(part, ".Rmd")
+    fName = paste0(part, ifelse(knitr, ".Rnw", ".Rmd"))
   }
 
   l = list(part = part, path = path, fName = fName,

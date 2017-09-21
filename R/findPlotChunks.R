@@ -9,7 +9,7 @@ findPlotChunks = function(fi){
 
   numChunks = nrow(chunks)
 
-  plotCommands = "(boxplot|cooks20x|eovcheck|hist|pairs(20x)*|plot|trendscatter)"
+  plotCommands = "(boxplot|cooks20x|eovcheck|hist|modcheck|pairs(20x)*|plot|trendscatter)"
 
   for(row in 1:numChunks){
     cp = chunks[row,]
