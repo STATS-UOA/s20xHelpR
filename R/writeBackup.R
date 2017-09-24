@@ -1,3 +1,6 @@
+#' To be documented
+#'
+#' @export
 writeBackup = function(src, path, dummyRun = FALSE){
   ## get all the backup files
   bkupFiles = list.files(path = path, pattern = "Rnw\\.bak[0-9]*")
