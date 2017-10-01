@@ -4,9 +4,9 @@
 \alias{trimPlot}
 \title{To be documented}
 \usage{
-trimPlot(x, data = NULL, fileName, plotCommand = plot, xlab. = "",
-  ylab. = "", axes = FALSE, mai = c(0.5, 0.5, 0.1, 0.1), mgpx = c(3,
-  0.3, 0), mgpy = c(3, 0.5, 0), axis.size.cex = 0.7, axis.lab.cex = 0.7,
+trimPlot(x, data = NULL, fileName, plotCommand = plot, x.lab = "",
+  y.lab = "", axes = FALSE, mai = c(0.5, 0.5, 0.1, 0.1), mgpx = c(3,
+  0.3, 0), mgpy = c(3, 0.6, 0), axis.size.cex = 0.7, axis.lab.cex = 0.7,
   linex = 1.2, liney = 1.8, lasy = 1, fig.width = 10, fig.height = 7,
   addElements = list(), ...)
 }

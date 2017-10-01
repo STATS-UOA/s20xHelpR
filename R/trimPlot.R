@@ -1,8 +1,8 @@
 #' To be documented
 #'
 #' @export
-trimPlot = function(x, data = NULL, fileName, plotCommand = plot, xlab. = "", ylab. = "", axes = FALSE, mai = c(0.5, 0.5, 0.1, 0.1),
-                    mgpx = c(3, .3, 0), mgpy = c(3, .5, 0), axis.size.cex = 0.7, axis.lab.cex = 0.7, linex = 1.2, liney = 1.8,
+trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.lab = "", axes = FALSE, mai = c(0.5, 0.5, 0.1, 0.1),
+                    mgpx = c(3, .3, 0), mgpy = c(3, .6, 0), axis.size.cex = 0.7, axis.lab.cex = 0.7, linex = 1.2, liney = 1.8,
                     lasy = 1, fig.width = 10, fig.height = 7, addElements = list(), ...){
 
   if(!grepl("^.*\\.pdf$", fileName)){
@@ -12,19 +12,42 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, xlab. = "", yl
   pdf(fileName, width = fig.width, height = fig.height)
   par(mai = mai)
 
-  eval(substitute(plotCommand(x, data = data, xlab = "", ylab = "", axes = axes, ...)))
+  # print(as.list(match.call(expand.dots=FALSE)))
+  if (class(x) == "lm") {
+    tryEvalData <- try(eval(substitute(plotCommand(x, xlab = "", ylab = "", axes = axes, ...))), silent = TRUE)
 
-  if(!axes){
-    axis(1, mgp = mgpx, cex.axis = axis.size.cex)
-    axis(2, mgp = mgpy, cex.axis = axis.size.cex)
+    if (class(tryEvalData) == "try-error" && substitute(plotCommand) == "plot") {
+      plot(x, caption = list("", "", "", "", "", ""), xaxt = ifelse(!axes, "n", "s"), yaxt = ifelse(!axes, "n", "s"), cex.id = 0.5, ...)
+    }
+
+    if (class(tryEvalData) == "try-error" && substitute(plotCommand) == "normcheck") {
+      normcheck(x, ...)
+    }
+
+    if (class(tryEvalData) == "try-error" && substitute(plotCommand) == "cooks20x") {
+      cooks20x(x, main = "", axisOpts = list(xAxis = FALSE, yAxisTight = FALSE), cex.labels = 0.5, ...)
+    }
+
+  } else {
+    tryEvalData <- try(eval(substitute(plotCommand(x, data = data, xlab = "", ylab = "", axes = axes, ...))), silent = TRUE)
+    if (class(tryEvalData) == "try-error") {
+      try(eval(substitute(plotCommand(x, xlab = "", ylab = "", axes = axes, ...))), silent = TRUE)
+    }
   }
 
-  title(xlab = xlab., cex.lab = axis.lab.cex, line = linex)
-  title(ylab = ylab., cex.lab = axis.lab.cex, line = liney, las = lasy)
+  if(!axes && substitute(plotCommand) != "normcheck"){
+    axis(1, mgp = mgpx, cex.axis = axis.size.cex)
+    axis(2, mgp = mgpy, cex.axis = axis.size.cex, las = lasy)
+  }
+
+  if(substitute(plotCommand) != "normcheck"){
+    title(xlab = x.lab, cex.lab = axis.lab.cex, line = linex)
+    title(ylab = y.lab, cex.lab = axis.lab.cex, line = liney)
+    box()
+  }
 
   lapply(addElements, function(x) eval(parse(text = x)))
 
-  box()
   graphics.off()
 }
 
