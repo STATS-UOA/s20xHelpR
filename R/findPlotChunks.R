@@ -1,3 +1,6 @@
+#' To be documented
+#'
+#' @export
 findPlotChunks = function(fi){
   Lines = readLines(fi$fullName)
   chunks = data.frame(chunkStart = grep("^ *<<[^>]*>>= *$", Lines),

@@ -1,3 +1,6 @@
+#' To be documented
+#'
+#' @export
 rebuild = function(fi){
   curPath = getwd()
   setwd(fi$path)
