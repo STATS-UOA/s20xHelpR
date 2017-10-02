@@ -9,6 +9,12 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.
     stop(paste("Invalid filename:", fileName, "\n"))
   }
 
+
+  if (substitute(plotCommand)  == "normcheck" || substitute(plotCommand)  =="cooks20x") {
+    fig.width <- fig.width*2
+    fig.height <- fig.height*2
+  }
+
   pdf(fileName, width = fig.width, height = fig.height)
   par(mai = mai)
 
@@ -25,7 +31,7 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.
     }
 
     if (class(tryEvalData) == "try-error" && substitute(plotCommand) == "cooks20x") {
-      cooks20x(x, main = "", axisOpts = list(xAxis = FALSE, yAxisTight = FALSE), cex.labels = 0.5, ...)
+      cooks20x(x, main = "", ...)
     }
 
   } else {
@@ -35,12 +41,12 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.
     }
   }
 
-  if(!axes && substitute(plotCommand) != "normcheck"){
+  if(!axes && substitute(plotCommand) != "normcheck" && substitute(plotCommand) != "cooks20x"){
     axis(1, mgp = mgpx, cex.axis = axis.size.cex)
     axis(2, mgp = mgpy, cex.axis = axis.size.cex, las = lasy)
   }
 
-  if(substitute(plotCommand) != "normcheck"){
+  if(substitute(plotCommand) != "normcheck" && substitute(plotCommand) != "cooks20x"){
     title(xlab = x.lab, cex.lab = axis.lab.cex, line = linex)
     title(ylab = y.lab, cex.lab = axis.lab.cex, line = liney)
     box()
