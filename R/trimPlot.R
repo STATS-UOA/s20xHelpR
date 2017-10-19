@@ -34,6 +34,10 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.
       cooks20x(x, main = "", ...)
     }
 
+    if (class(tryEvalData) == "try-error" && substitute(plotCommand) == "eovcheck") {
+      eovcheck(x, main = "", ...)
+    }
+
   } else {
     tryEvalData <- try(eval(substitute(plotCommand(x, data = data, xlab = "", ylab = "", axes = axes, ...))), silent = TRUE)
     if (class(tryEvalData) == "try-error") {
@@ -52,7 +56,7 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.
     box()
   }
 
-  lapply(addElements, function(x) eval(parse(text = x)))
+  lapply(addElements, function(x) eval(x))
 
   graphics.off()
 }
@@ -60,6 +64,11 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.
 ### Examples of how this is supposed to work - uncomment to test
 # library(s20x)
 # data(course.df)
-# trimPlot(Exam ~ Test, data = course.df, fileName = "figure/test.pdf", pch = substr(Attend, 1, 1), cex = 0.7)
+# examtest.fit <- lm(Exam ~ Test, data = course.df)
+# trimPlot(Exam ~ Test, data = course.df, fileName = "figure/test.pdf", pch = substr(Attend, 1, 1), cex = 0.7,
+#          addElements = list(
+#            points(course.df$Test[21],fitted(examtest.fit)[21], col="blue", pch=19, cex=0.7),
+#            points(course.df$Test[21],course.df$Exam[21], col="red", pch=19, cex=0.7)
+#          ))
 #
 # I want this to produce a PDF with reduced margins, and the scaling set to the scaling provided.
