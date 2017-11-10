@@ -38,6 +38,8 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.
       eovcheck(x, main = "", ...)
     }
 
+  } else if (substitute(plotCommand) == "pairs20x") {
+    pairs20x(x, main = "", ...)
   } else {
     tryEvalData <- try(eval(substitute(plotCommand(x, data = data, xlab = "", ylab = "", axes = axes, ...))), silent = TRUE)
     if (class(tryEvalData) == "try-error") {
@@ -45,7 +47,7 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.
     }
   }
 
-  if(!axes && substitute(plotCommand) != "normcheck" && substitute(plotCommand) != "cooks20x"){
+  if(!axes && substitute(plotCommand) != "normcheck" && substitute(plotCommand) != "cooks20x" && substitute(plotCommand) != "pairs20x"){
     if (is.null(as.list(match.call())$horizontal)) {
       horizontalTest = FALSE
     } else {
@@ -65,7 +67,7 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.
 
   }
 
-  if(substitute(plotCommand) != "normcheck" && substitute(plotCommand) != "cooks20x"){
+  if(substitute(plotCommand) != "normcheck" && substitute(plotCommand) != "cooks20x" && substitute(plotCommand) != "pairs20x"){
     title(xlab = x.lab, cex.lab = axis.lab.cex, line = linex)
     title(ylab = y.lab, cex.lab = axis.lab.cex, line = liney)
     box()
