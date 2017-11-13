@@ -5,7 +5,7 @@
 \title{To be documented}
 \usage{
 slimSummary(lm.obj, showCall = FALSE, showResiduals = FALSE,
-  showSignif = FALSE, showAOVsummary = TRUE, ...)
+  showSignif = FALSE, showAOVsummary = TRUE, showGLMsummary = FALSE, ...)
 }
 \description{
 To be documented

@@ -6,6 +6,7 @@ slimSummary = function(lm.obj,
                        showResiduals = FALSE,
                        showSignif = FALSE,
                        showAOVsummary = TRUE,
+                       showGLMsummary = FALSE,
                        ...){
 
   Lines = capture.output(summary(lm.obj, ...))
@@ -24,6 +25,8 @@ slimSummary = function(lm.obj,
   signifLine = grep("^Signif.*$", Lines)
   anovaSummaryBlock = list(start = grep("^Residual standard.*$", Lines),
                            end = grep("^F-statistic.*$", Lines))
+  glmSummaryBlock = list(start = grep("^\\(Dispersion parameter.*$", Lines),
+                           end = grep("^Residual deviance.*$", Lines))
 
   ## special case for constant mean model, e.g. y ~ 1
   if(length(anovaSummaryBlock$end) == 0){
@@ -51,6 +54,11 @@ slimSummary = function(lm.obj,
 
   if(showAOVsummary){
     cat(paste0(Lines[anovaSummaryBlock$start:anovaSummaryBlock$end],
+               collapse = "\n"))
+  }
+
+  if(showGLMsummary){
+    cat(paste0(Lines[glmSummaryBlock$start:glmSummaryBlock$end],
                collapse = "\n"))
   }
 }
