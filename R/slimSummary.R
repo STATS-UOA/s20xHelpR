@@ -2,16 +2,16 @@
 #'
 #' @export
 slimSummary = function(lm.obj,
-                       showCall = FALSE,
+                       showCall = !showAOVsummary,
                        showResiduals = FALSE,
                        showSignif = FALSE,
-                       showAOVsummary = TRUE,
-                       showGLMsummary = FALSE,
+                       showAOVsummary = ifelse(class(lm.obj)[1] == "lm", TRUE, FALSE),
+                       showGLMsummary = !showAOVsummary,
                        ...){
 
   Lines = capture.output(summary(lm.obj, ...))
 
-  callBlock = grep("^(Call|lm).*$", Lines)
+  callBlock = grep("^(Call|lm|glm).*$", Lines)
   resBlock = grep("^Residuals.*$", Lines) + 0:2
   coefTable = list(start = grep("^Coefficients:.*$", Lines),
                    end = grep("^---$", Lines))
@@ -36,7 +36,7 @@ slimSummary = function(lm.obj,
 
   if(showCall){
     cat(paste0(Lines[callBlock], collapse = "\n"))
-    cat("\n")
+    cat("\n\n")
   }
 
   if(showResiduals){
