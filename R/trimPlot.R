@@ -19,7 +19,7 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.
   par(mai = mai)
 
   # print(as.list(match.call(expand.dots=FALSE)))
-  if (class(x) == "lm") {
+  if (class(x) %in% "lm") {
     tryEvalData <- try(eval(substitute(plotCommand(x, xlab = "", ylab = "", axes = axes, ...))), silent = TRUE)
 
     if (class(tryEvalData) == "try-error" && substitute(plotCommand) == "plot") {
@@ -40,6 +40,8 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.
 
   } else if (substitute(plotCommand) == "pairs20x") {
     pairs20x(x, main = "", ...)
+  } else if (substitute(plotCommand) == "barplot") {
+    barplot(x, cex.names = axis.size.cex[1], cex.axis = axis.size.cex[2], mgp = mgpy, las = lasy, ...)
   } else {
     tryEvalData <- try(eval(substitute(plotCommand(x, data = data, xlab = "", ylab = "", axes = axes, ...))), silent = TRUE)
     if (class(tryEvalData) == "try-error") {
@@ -47,7 +49,7 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.
     }
   }
 
-  if(!axes && substitute(plotCommand) != "normcheck" && substitute(plotCommand) != "cooks20x" && substitute(plotCommand) != "pairs20x"){
+  if(!axes && substitute(plotCommand) != "normcheck" && substitute(plotCommand) != "cooks20x" && substitute(plotCommand) != "pairs20x" && substitute(plotCommand) != "barplot"){
     if (is.null(as.list(match.call())$horizontal)) {
       horizontalTest = FALSE
     } else {
@@ -67,7 +69,7 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.
 
   }
 
-  if(substitute(plotCommand) != "normcheck" && substitute(plotCommand) != "cooks20x" && substitute(plotCommand) != "pairs20x"){
+  if(substitute(plotCommand) != "barplot" && substitute(plotCommand) != "normcheck" && substitute(plotCommand) != "cooks20x" && substitute(plotCommand) != "pairs20x"){
     title(xlab = x.lab, cex.lab = axis.lab.cex, line = linex)
     title(ylab = y.lab, cex.lab = axis.lab.cex, line = liney)
     box()
