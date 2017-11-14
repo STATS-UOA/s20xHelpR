@@ -19,7 +19,7 @@ trimPlot = function(x, data = NULL, fileName, plotCommand = plot, x.lab = "", y.
   par(mai = mai)
 
   # print(as.list(match.call(expand.dots=FALSE)))
-  if (class(x) %in% "lm") {
+  if (any(class(x) == "lm")) {
     tryEvalData <- try(eval(substitute(plotCommand(x, xlab = "", ylab = "", axes = axes, ...))), silent = TRUE)
 
     if (class(tryEvalData) == "try-error" && substitute(plotCommand) == "plot") {
