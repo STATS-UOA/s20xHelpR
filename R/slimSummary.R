@@ -2,15 +2,16 @@
 #'
 #' @export
 slimSummary = function(lm.obj,
-                       showCall = FALSE,
+                       showCall = !showAOVsummary,
                        showResiduals = FALSE,
                        showSignif = FALSE,
-                       showAOVsummary = TRUE,
+                       showAOVsummary = ifelse(class(lm.obj)[1] == "lm", TRUE, FALSE),
+                       showGLMsummary = !showAOVsummary,
                        ...){
 
   Lines = capture.output(summary(lm.obj, ...))
 
-  callBlock = grep("^(Call|lm).*$", Lines)
+  callBlock = grep("^(Call|lm|glm).*$", Lines)
   resBlock = grep("^Residuals.*$", Lines) + 0:2
   coefTable = list(start = grep("^Coefficients:.*$", Lines),
                    end = grep("^---$", Lines))
@@ -24,6 +25,8 @@ slimSummary = function(lm.obj,
   signifLine = grep("^Signif.*$", Lines)
   anovaSummaryBlock = list(start = grep("^Residual standard.*$", Lines),
                            end = grep("^F-statistic.*$", Lines))
+  glmSummaryBlock = list(start = grep("^\\(Dispersion parameter.*$", Lines),
+                           end = grep("^Residual deviance.*$", Lines))
 
   ## special case for constant mean model, e.g. y ~ 1
   if(length(anovaSummaryBlock$end) == 0){
@@ -33,7 +36,7 @@ slimSummary = function(lm.obj,
 
   if(showCall){
     cat(paste0(Lines[callBlock], collapse = "\n"))
-    cat("\n")
+    cat("\n\n")
   }
 
   if(showResiduals){
@@ -51,6 +54,11 @@ slimSummary = function(lm.obj,
 
   if(showAOVsummary){
     cat(paste0(Lines[anovaSummaryBlock$start:anovaSummaryBlock$end],
+               collapse = "\n"))
+  }
+
+  if(showGLMsummary){
+    cat(paste0(Lines[glmSummaryBlock$start:glmSummaryBlock$end],
                collapse = "\n"))
   }
 }
