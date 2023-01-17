@@ -10,4 +10,4 @@ License: What license is it under?
 Encoding: UTF-8
 Depends: stringr
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 7.2.3

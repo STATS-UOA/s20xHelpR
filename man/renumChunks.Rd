@@ -4,8 +4,7 @@
 \alias{renumChunks}
 \title{Renumber all the code chunks in an Sweave/Knitr file or an R Markdown file}
 \usage{
-renumChunks(fi, dummyRun = TRUE, backup = TRUE, knitr = TRUE,
-  labelStub = NULL)
+renumChunks(fi, dummyRun = TRUE, backup = TRUE, knitr = TRUE, labelStub = NULL)
 }
 \arguments{
 \item{fi}{an object of class \code{fileInfo}. See \code{\link{setFileNames}}.}
