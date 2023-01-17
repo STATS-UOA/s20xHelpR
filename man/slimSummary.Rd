@@ -4,6 +4,7 @@
 \alias{slimSummary}
 \title{To be documented}
 \usage{
+<<<<<<< HEAD
 slimSummary(
   lm.obj,
   showCall = FALSE,
@@ -12,6 +13,11 @@ slimSummary(
   showAOVsummary = TRUE,
   ...
 )
+=======
+slimSummary(lm.obj, showCall = !showAOVsummary, showResiduals = FALSE,
+  showSignif = FALSE, showAOVsummary = ifelse(class(lm.obj)[1] == "lm",
+  TRUE, FALSE), showGLMsummary = !showAOVsummary, ...)
+>>>>>>> 37dd5fb2e8d1220633f05c73b066284723256ad5
 }
 \description{
 To be documented
