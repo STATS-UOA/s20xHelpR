@@ -1,12 +1,13 @@
 Package: s20xHelpR
 Type: Package
 Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Version: 0.1.1
+Date: 2024-05-18
+Authors@R: c(
+    person("James", "Curran", , "j.curran@auckland.ac.nz", role = c("aut", "cre"),
+           comment = "Wrote the original R package. Current maintainer."))
+Description: Provides functions that help with the production of the STATS 20x notes
+License: MIT + file LICENSE
 Encoding: UTF-8
 Depends: stringr
 LazyData: true
