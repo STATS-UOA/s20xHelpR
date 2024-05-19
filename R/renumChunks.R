@@ -10,16 +10,16 @@
 #'
 #' @export
 renumChunks = function(fi, dummyRun = TRUE, backup = TRUE, knitr = TRUE, labelStub = NULL){
-  Lines = readLines(fi$fullName)
+  Lines = trimws(readLines(fi$fullName), which = "right")
 
   if(backup){
     writeBackup(src = fi$fName, path = fi$path, dummyRun = dummyRun)
   }
 
   chunkLines = if(knitr){
-    grep("^<<([^>]*)>>=$", Lines)
+    grep("^<<([^>]*)>>=[[:space:]]*$", Lines)
   }else{
-    grep("^[`]{3}\\{r[^}]*\\}$", Lines)
+    grep("^[`]{3}\\{r[^}]*\\}[[:space:]]*$", Lines)
   }
 
   chunkCounter = 0
@@ -41,7 +41,7 @@ renumChunks = function(fi, dummyRun = TRUE, backup = TRUE, knitr = TRUE, labelSt
     chunkCounter = chunkCounter + 1
     ## remove any existing chunk label
     pattern = if(knitr){
-      "(RC-(0[1-9]|1[0-9]|20)-[0-9]{3}|R[^,>]+)(, )*"
+      "(RC-H?(0[1-9]|1[0-9]|20)-[0-9]{3}|R[^,>]+)(, )*"
     }else{
       "(rc-(cs[0-9]+)-[0-9]{3})(, )*"
     }

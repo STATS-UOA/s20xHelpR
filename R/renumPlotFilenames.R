@@ -8,7 +8,7 @@
 #'
 #' @export
 renumPlotFilenames = function(fi, dummyRun = TRUE, backup = TRUE){
-  Lines = readLines(fi$fullName)
+  Lines = trimws(readLines(fi$fullName), which = "right")
 
   if(backup){
     writeBackup(src = fi$fName, path = fi$path, dummyRun = dummyRun)
@@ -23,7 +23,7 @@ renumPlotFilenames = function(fi, dummyRun = TRUE, backup = TRUE){
 
   numChunks = nrow(chunks)
 
-  plotCommands = "(boxplot|cooks20x|eovcheck|hist|modcheck|pairs(20x)*|plot|trendscatter)"
+  plotCommands = "((box|qq|trim)?plot|cooks20x|(norm|eov)check|hist|modcheck|pairs(20x)*|trendscatter)"
 
   for(row in 1:numChunks){
     cp = chunks[row,]
@@ -31,10 +31,51 @@ renumPlotFilenames = function(fi, dummyRun = TRUE, backup = TRUE){
     chunkLines = Lines[(cp$chunkStart):(cp$chunkEnd)]
 
     if(!grepl('eval *[=] *FALSE', chunkHeader)){ ## got to be echo=FALSE in chunk because we do want to evaluate it but we don't want the students to see it.
-      if(any(grepl('pdf\\(', chunkLines))){
+      pdfFileLine = grep('pdf', chunkLines)
+
+      if(length(pdfFileLine) > 1){
+        stop(paste0("There is more than one pdf line in chunck ", chunkHeader, "\n"))
+      }
+
+      if(length(pdfFileLine) == 1){
         chunkLabel = gsub("\\.", "_", gsub("^<<([^,>]+).*>>=$", "\\1", chunkHeader))
-        pdfLine = chunkLines[grep('pdf\\(', chunkLines)]
-        cat(paste(pdfLine, "\n"))
+        pdfFileName = gsub('^[^"]*"(figure/)?([^.]*)\\.pdf".*$', '\\2', chunkLines[pdfFileLine])
+
+        ## first replace the file name line
+
+        ## We need the location of the file name line in the original file
+        pfnNum = grep(chunkLines[pdfFileLine], Lines)
+
+        if(length(pfnNum) != 1) ## we didn't find it which would be odd but might happen
+          stop(paste0("Could not find the line '",
+                      chunkLines[pdfFileLine],
+                      "'\n"))
+
+        ## browser()
+        cat("\n")
+        cat(paste0('Old ', pfnNum, ': ', Lines[pfnNum], '\n'))
+        Lines[pfnNum] = gsub(paste0('(figure\\/)?', pdfFileName, '.pdf'),
+                             paste0(chunkLabel, '.pdf'),
+                             Lines[pfnNum])
+
+        cat(paste0('New ', pfnNum, ': ', Lines[pfnNum], '\n'))
+
+
+        ## Are there any matching includegraphics statements?
+        igLine = grep(paste0('includegraphics(\\[[^]*\\])?\\{(figure\\/)?', pdfFileName),
+                      Lines)
+
+        if(length(igLine > 0)){
+          cat(paste0('Old ', igLine, ': ', Lines[igLine], '\n'))
+          Lines[igLine] = gsub(paste0('(figure\\/)?', pdfFileName),
+                               chunkLabel,
+                               Lines[igLine])
+          cat(paste0('New ', igLine, ': ', Lines[igLine], '\n'))
+          cat("\n")
+        }else{
+          cat(paste0("No matching includegraphics for ", pdfFileName, "\n"))
+        }
+        #cat(paste0(chunkLines[pdfFileLine], "\n"))
       }
     }
   }
