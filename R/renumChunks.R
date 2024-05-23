@@ -41,7 +41,7 @@ renumChunks = function(fi, dummyRun = TRUE, backup = TRUE, knitr = TRUE, labelSt
     chunkCounter = chunkCounter + 1
     ## remove any existing chunk label
     pattern = if(knitr){
-      "(RC-H?(0[1-9]|1[0-9]|20)-[0-9]{3}|R[^,>]+)(, )*"
+      "(RC-H?(0[1-9]|1[0-9]|20)-[0-9]{3}[A-Za-z]?|R[^,>]+)(, )*"
     }else{
       "(rc-(cs[0-9]+)-[0-9]{3})(, )*"
     }

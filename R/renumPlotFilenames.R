@@ -51,7 +51,7 @@ renumPlotFilenames = function(fi, dummyRun = TRUE, backup = TRUE){
                       chunkLines[pdfFileLine],
                       "'\n"))
 
-        ## browser()
+        # browser()
         cat("\n")
         cat(paste0('Old ', pfnNum, ': ', Lines[pfnNum], '\n'))
         Lines[pfnNum] = gsub(paste0('(figure\\/)?', pdfFileName, '.pdf'),
