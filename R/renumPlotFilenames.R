@@ -45,25 +45,37 @@ renumPlotFilenames = function(fi, dummyRun = TRUE, backup = TRUE){
 
         ## We need the location of the file name line in the original file
         pfnNum = grep(chunkLines[pdfFileLine], Lines)
+        ## this should stop matching to numbers behind the current chunk.
+        ## This can happen when previously relabelled files match the current one
+        ## Clearly we don't want these because why would we be trying to include
+        ## a file that we haven't created yet.
+        pfnNum = pfnNum[pfnNum > cp$chunkStart]
 
-        if(length(pfnNum) != 1) ## we didn't find it which would be odd but might happen
+        if(length(pfnNum) == 0){ ## we didn't find it which would be odd but might happen
           stop(paste0("Could not find the line '",
                       chunkLines[pdfFileLine],
                       "'\n"))
+        }
+
+        if(length(pfnNum) > 1){
+          warning("More than matching pdf file name lines\n")
+          browser()
+        }
 
         # browser()
         cat("\n")
         cat(paste0('Old ', pfnNum, ': ', Lines[pfnNum], '\n'))
         Lines[pfnNum] = gsub(paste0('(figure\\/)?', pdfFileName, '.pdf'),
-                             paste0(chunkLabel, '.pdf'),
+                             paste0('\\1',chunkLabel, '.pdf'),
                              Lines[pfnNum])
 
         cat(paste0('New ', pfnNum, ': ', Lines[pfnNum], '\n'))
 
 
         ## Are there any matching includegraphics statements?
-        igLine = grep(paste0('includegraphics(\\[[^]*\\])?\\{(figure\\/)?', pdfFileName),
+        igLine = grep(paste0('includegraphics(\\[[^]]*\\])?\\{(figure\\/)?', pdfFileName, '\\}$'),
                       Lines)
+        igLine = igLine[igLine > cp$chunkStart]
 
         if(length(igLine > 0)){
           cat(paste0('Old ', igLine, ': ', Lines[igLine], '\n'))
@@ -73,6 +85,7 @@ renumPlotFilenames = function(fi, dummyRun = TRUE, backup = TRUE){
           cat(paste0('New ', igLine, ': ', Lines[igLine], '\n'))
           cat("\n")
         }else{
+          browser()
           cat(paste0("No matching includegraphics for ", pdfFileName, "\n"))
         }
         #cat(paste0(chunkLines[pdfFileLine], "\n"))
