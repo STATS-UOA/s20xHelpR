@@ -2,9 +2,8 @@
 % Please edit documentation in R/trimPlot.R
 \name{trimPlot}
 \alias{trimPlot}
-\title{To be documented}
+\title{Write a plot to a PDF file with reduced margins}
 \usage{
-<<<<<<< HEAD
 trimPlot(
   x,
   data = NULL,
@@ -16,25 +15,84 @@ trimPlot(
   mai = c(0.5, 0.5, 0.1, 0.1),
   mgpx = c(3, 0.3, 0),
   mgpy = c(3, 0.6, 0),
-  axis.size.cex = 0.7,
+  axis.size.cex = c(0.7, 0.7),
   axis.lab.cex = 0.7,
   linex = 1.2,
   liney = 1.8,
   lasy = 1,
   fig.width = 10,
   fig.height = 7,
+  .at = NULL,
+  .labels = NULL,
   addElements = list(),
   ...
 )
-=======
-trimPlot(x, data = NULL, fileName, plotCommand = plot, x.lab = "",
-  y.lab = "", axes = FALSE, mai = c(0.5, 0.5, 0.1, 0.1), mgpx = c(3,
-  0.3, 0), mgpy = c(3, 0.6, 0), axis.size.cex = c(0.7, 0.7),
-  axis.lab.cex = 0.7, linex = 1.2, liney = 1.8, lasy = 1,
-  fig.width = 10, fig.height = 7, .at = NULL, .labels = NULL,
-  addElements = list(), ...)
->>>>>>> 37dd5fb2e8d1220633f05c73b066284723256ad5
+}
+\arguments{
+\item{x}{the object to plot, for example a formula, a vector or a fitted model.}
+
+\item{data}{a data frame for use when \code{x} is a formula.}
+
+\item{fileName}{the name of the PDF file, which must end in \code{.pdf}. The
+directory must already exist.}
+
+\item{plotCommand}{the plotting function.}
+
+\item{x.lab, y.lab}{the axis labels.}
+
+\item{axes}{if \code{TRUE} then \code{plotCommand} draws its own axes.}
+
+\item{mai}{the margin sizes in inches, passed to \code{\link[graphics]{par}}.}
+
+\item{mgpx, mgpy}{the margin lines for the axes, as for \code{mgp} in
+\code{\link[graphics]{par}}.}
+
+\item{axis.size.cex}{the size of the axis numbers for the x and y axes. A
+single value is used for both.}
+
+\item{axis.lab.cex}{the size of the axis labels.}
+
+\item{linex, liney}{the margin lines for the axis labels.}
+
+\item{lasy}{the orientation of the y axis numbers, as for \code{las} in
+\code{\link[graphics]{par}}.}
+
+\item{fig.width, fig.height}{the size of the PDF file in inches.}
+
+\item{.at, .labels}{the tick positions and labels for the categorical axis of a
+boxplot.}
+
+\item{addElements}{a list of calls that add to the plot, for example
+\code{list(abline(h = 0), points(1, 1))}. They are written directly in the
+call to \code{trimPlot}, and run after the plot has been drawn.}
+
+\item{...}{other arguments passed to \code{plotCommand}.}
+}
+\value{
+\code{NULL}, invisibly.
 }
 \description{
-To be documented
+Draws a plot in a new PDF file with small margins, tight axes and small axis
+text, for use with \code{\\includegraphics} in the notes. The file is always
+closed, including after an error, and any graphics device that was open before
+the call stays open and active.
+}
+\details{
+Pass \code{plotCommand} by name, for example \code{plotCommand = normcheck},
+because the function name selects how the plot is drawn. \code{normcheck} and
+\code{cooks20x} get a PDF twice the size of \code{fig.width} and
+\code{fig.height}. \code{normcheck}, \code{cooks20x}, \code{pairs20x} and
+\code{barplot} manage their own axes and labels, so \code{x.lab}, \code{y.lab}
+and the other axis arguments do not apply to them, except that \code{barplot}
+uses \code{axis.size.cex}, \code{mgpy} and \code{lasy}.
+
+The plot is first drawn with axes and labels turned off, then with a simpler
+call if that fails. An error is raised if every attempt fails.
+}
+\examples{
+fileName = tempfile(fileext = ".pdf")
+trimPlot(mpg ~ wt, data = mtcars, fileName = fileName,
+         x.lab = "Weight", y.lab = "MPG",
+         addElements = list(abline(h = 20, lty = 2)))
+
 }

@@ -2,10 +2,30 @@
 % Please edit documentation in R/writeBackup.R
 \name{writeBackup}
 \alias{writeBackup}
-\title{To be documented}
+\title{Make a numbered backup of a file}
 \usage{
 writeBackup(src, path, dummyRun = FALSE)
 }
+\arguments{
+\item{src}{the name of the file, without its directory.}
+
+\item{path}{the directory containing the file.}
+
+\item{dummyRun}{if \code{TRUE} then the copy is displayed on screen but not made.}
+}
+\value{
+The path of the backup file, invisibly.
+}
 \description{
-To be documented
+Copies \code{src} to \code{src.bak<n>} in the same directory, where \code{n}
+is one more than the highest existing backup of that file, so that backups are
+never overwritten.
+}
+\examples{
+root = tempfile()
+dir.create(root)
+writeLines("text", file.path(root, "demo.Rnw"))
+writeBackup("demo.Rnw", root)
+list.files(root)
+
 }

@@ -2,10 +2,25 @@
 % Please edit documentation in R/findContract.R
 \name{findContract}
 \alias{findContract}
-\title{To be documented}
+\title{Find contractions in a notes file}
 \usage{
 findContract(fi)
 }
+\arguments{
+\item{fi}{an object of class \code{fileInfo}. See \code{\link{setFileNames}}.}
+}
+\value{
+The matching line numbers, invisibly. The file is not changed.
+}
 \description{
-To be documented
+Prints each line containing a contraction such as \emph{it's}, \emph{don't}
+or \emph{we'll}, so they can be removed from formal writing. Possessives such
+as \emph{the student's mark} are not reported.
+}
+\examples{
+root = tempfile()
+dir.create(root)
+writeLines(c("It's a fit.", "The student's mark."), file.path(root, "demo.Rnw"))
+findContract(setFileNames("demo", root, handout = FALSE, knitr = TRUE))
+
 }

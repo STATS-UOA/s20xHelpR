@@ -2,10 +2,27 @@
 % Please edit documentation in R/findPlotChunks.R
 \name{findPlotChunks}
 \alias{findPlotChunks}
-\title{To be documented}
+\title{Find plotting chunks that do not write to a PDF file}
 \usage{
 findPlotChunks(fi)
 }
+\arguments{
+\item{fi}{an object of class \code{fileInfo} describing an \code{.Rnw} file.
+See \code{\link{setFileNames}}.}
+}
+\value{
+The matching line numbers in the file, invisibly. Each match is
+  printed as the file name, line number and line. The file is not changed.
+}
 \description{
-To be documented
+Reports code chunks that call a plotting function but neither open a
+\code{pdf()} device nor use \code{\link{trimPlot}}. Chunks with
+\code{eval=FALSE} are skipped.
+}
+\examples{
+root = tempfile()
+dir.create(root)
+writeLines(c("<<a>>=", "plot(1:3)", "@"), file.path(root, "demo.Rnw"))
+findPlotChunks(setFileNames("demo", root, handout = FALSE, knitr = TRUE))
+
 }

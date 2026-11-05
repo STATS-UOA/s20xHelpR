@@ -9,3 +9,25 @@ export(setFileNames)
 export(slimSummary)
 export(trimPlot)
 export(writeBackup)
+importFrom(grDevices,
+  dev.cur,
+  dev.list,
+  dev.off,
+  dev.set,
+  pdf
+)
+importFrom(graphics,
+  axis,
+  barplot,
+  box,
+  par,
+  title
+)
+importFrom(s20x,
+  cooks20x,
+  eovcheck,
+  normcheck,
+  pairs20x,
+  trendscatter
+)
+importFrom(utils,capture.output)

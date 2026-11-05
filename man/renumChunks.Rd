@@ -2,21 +2,48 @@
 % Please edit documentation in R/renumChunks.R
 \name{renumChunks}
 \alias{renumChunks}
-\title{Renumber all the code chunks in an Sweave/Knitr file or an R Markdown file}
+\title{Renumber all the code chunks in an Sweave/knitr or R Markdown file}
 \usage{
-renumChunks(fi, dummyRun = TRUE, backup = TRUE, knitr = TRUE, labelStub = NULL)
+renumChunks(
+  fi,
+  dummyRun = TRUE,
+  backup = TRUE,
+  knitr = grepl("\\\\.Rnw$", fi$fName),
+  labelStub = NULL
+)
 }
 \arguments{
 \item{fi}{an object of class \code{fileInfo}. See \code{\link{setFileNames}}.}
 
-\item{dummyRun}{if \code{FALSE} then the changes will be committed to disk as well as being displayed on screen. It is a good idea to do a dummy run first.}
+\item{dummyRun}{if \code{FALSE} then the changes will be committed to disk as
+well as being displayed on screen. It is a good idea to do a dummy run first.}
 
-\item{backup}{if \code{TRUE} and \code{dummyRun} is \code{FALSE} then a backup file will be created with sequential numbering to stop over-writing existing backups.}
+\item{backup}{if \code{TRUE} and \code{dummyRun} is \code{FALSE} then a backup
+file will be created with sequential numbering to stop over-writing existing
+backups. See \code{\link{writeBackup}}.}
 
-\item{knitr}{if \code{TRUE} then knitr style code chunks are expected otherwise R Markdown code chunks are expected.}
+\item{knitr}{if \code{TRUE} then knitr style code chunks are expected otherwise
+R Markdown code chunks are expected. By default this follows the file
+extension.}
 
-\item{labelStub}{used for specifying a bespoke label stub for each label. If it is not specified (default) then \code{RC-} and the handout number are used.}
+\item{labelStub}{used for specifying a bespoke label stub for each label. If it
+is not specified (default) then \code{RC-} and the \code{part} of \code{fi}
+are used, for example \code{RC-H02-}. Labels are written in upper case.}
+}
+\value{
+\code{NULL}, invisibly. Each new chunk header is printed.
 }
 \description{
-Given all the chunks a sequential unique ID
+Gives every chunk a sequential unique label, numbered from 000. The existing
+label, which is the leading unnamed chunk option, is replaced and all other
+chunk options are kept. Trailing whitespace is removed from every line when
+the file is written.
+}
+\examples{
+root = tempfile()
+dir.create(root)
+writeLines(c("<<old, echo=FALSE>>=", "1", "@"), file.path(root, "demo.Rnw"))
+fi = setFileNames("demo", root, handout = FALSE, knitr = TRUE)
+renumChunks(fi)
+
 }

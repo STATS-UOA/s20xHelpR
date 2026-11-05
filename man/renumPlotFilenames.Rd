@@ -2,17 +2,47 @@
 % Please edit documentation in R/renumPlotFilenames.R
 \name{renumPlotFilenames}
 \alias{renumPlotFilenames}
-\title{Renumber all the PDF file names in an Sweave/Knitr file}
+\title{Rename the PDF files in an Sweave/knitr file to match their chunk labels}
 \usage{
 renumPlotFilenames(fi, dummyRun = TRUE, backup = TRUE)
 }
 \arguments{
-\item{fi}{an object of class \code{fileInfo}. See \code{\link{setFileNames}}.}
+\item{fi}{an object of class \code{fileInfo} describing an \code{.Rnw} file.
+See \code{\link{setFileNames}}.}
 
-\item{dummyRun}{if \code{FALSE} then the changes will be committed to disk as well as being displayed on screen. It is a good idea to do a dummy run first.}
+\item{dummyRun}{if \code{FALSE} then the changes will be committed to disk as
+well as being displayed on screen. It is a good idea to do a dummy run first.}
 
-\item{backup}{if \code{TRUE} and \code{dummyRun} is \code{FALSE} then a backup file will be created with sequential numbering to stop over-writing existing backups.}
+\item{backup}{if \code{TRUE} and \code{dummyRun} is \code{FALSE} then a backup
+file will be created with sequential numbering to stop over-writing existing
+backups. See \code{\link{writeBackup}}.}
+}
+\value{
+\code{NULL}, invisibly. Each changed line is printed.
 }
 \description{
-Makes sure the file
+Renames the PDF file written in each chunk after the chunk's label, with any
+\code{.} replaced by \code{_}, and updates the \code{\\includegraphics} lines
+that follow the chunk. Any directory in a path, such as \code{figure/}, is
+kept. Run \code{\link{renumChunks}} first so that the labels are final.
+}
+\details{
+A chunk is processed when a line in it contains a quoted file name ending in
+\code{.pdf}. Commented lines and chunks with \code{eval=FALSE} are ignored. A
+chunk naming several PDF files gets the suffixes \code{A}, \code{B}, ... in
+the order they appear, for example \code{RC-H13-003A}. It is an error for a
+chunk with a PDF file to have no label. A plot with no matching \code{\\includegraphics} line is reported. PDF files
+already on disk are not renamed.
+}
+\examples{
+root = tempfile()
+dir.create(root)
+writeLines(c("<<RC-H02-005>>=",
+             "trimPlot(1:3, fileName = \"figure/old.pdf\")",
+             "@",
+             "\\\\includegraphics{figure/old}"),
+           file.path(root, "demo.Rnw"))
+fi = setFileNames("demo", root, handout = FALSE, knitr = TRUE)
+renumPlotFilenames(fi)
+
 }

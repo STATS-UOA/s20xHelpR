@@ -1,16 +1,27 @@
 Package: s20xHelpR
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.1
-Date: 2024-05-18
+Title: Helper Functions for Producing the STATS 20x Course Notes
+Version: 0.2.0.001
+Date: 2026-11-05
 Authors@R: c(
     person("James", "Curran", , "j.curran@auckland.ac.nz", role = c("aut", "cre"),
            comment = "Wrote the original R package. Current maintainer."))
-Description: Provides functions that help with the production of the STATS 20x notes
+Description: Provides functions that help with the production of the STATS 20x
+    notes. They renumber code chunks and plot files in knitr and R Markdown
+    sources, check those sources for common problems, and produce compact model
+    summaries and tightly cropped figures.
 License: MIT + file LICENSE
 Encoding: UTF-8
-Depends: stringr
-LazyData: true
-RoxygenNote: 7.2.3
+Imports:
+    graphics,
+    grDevices,
+    knitr,
+    s20x,
+    utils
+Suggests:
+    testthat (>= 3.0.0),
+    withr
+Config/testthat/edition: 3
 URL: https://github.com/STATS-UOA/s20xHelpR
 BugReports: https://github.com/STATS-UOA/s20xHelpR/issues
+Config/roxygen2/version: 8.1.1

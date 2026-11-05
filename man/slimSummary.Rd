@@ -2,23 +2,51 @@
 % Please edit documentation in R/slimSummary.R
 \name{slimSummary}
 \alias{slimSummary}
-\title{To be documented}
+\title{Print a shortened model summary}
 \usage{
-<<<<<<< HEAD
 slimSummary(
   lm.obj,
-  showCall = FALSE,
+  showCall = !showAOVsummary,
   showResiduals = FALSE,
   showSignif = FALSE,
-  showAOVsummary = TRUE,
+  showAOVsummary = class(lm.obj)[1] == "lm",
+  showGLMsummary = !showAOVsummary,
   ...
 )
-=======
-slimSummary(lm.obj, showCall = !showAOVsummary, showResiduals = FALSE,
-  showSignif = FALSE, showAOVsummary = ifelse(class(lm.obj)[1] == "lm",
-  TRUE, FALSE), showGLMsummary = !showAOVsummary, ...)
->>>>>>> 37dd5fb2e8d1220633f05c73b066284723256ad5
+}
+\arguments{
+\item{lm.obj}{a fitted model of class \code{lm} or \code{glm}.}
+
+\item{showCall}{if \code{TRUE} then show the model call.}
+
+\item{showResiduals}{if \code{TRUE} then show the summary of the residuals.}
+
+\item{showSignif}{if \code{TRUE} then show the significance codes legend.}
+
+\item{showAOVsummary}{if \code{TRUE} then show the block from the residual
+standard error to the F-statistic. The default is \code{TRUE} for \code{lm}
+objects.}
+
+\item{showGLMsummary}{if \code{TRUE} then show the block from the dispersion
+parameter to the residual deviance. The default is \code{TRUE} for
+\code{glm} objects.}
+
+\item{...}{other arguments passed to \code{\link{summary}}.}
+}
+\value{
+\code{NULL}, invisibly. The selected output is printed.
 }
 \description{
-To be documented
+Prints selected sections of \code{summary(lm.obj)}, always including the
+coefficient table, so that model output fits on a slide or a page.
+}
+\details{
+The sections are taken from the printed output of \code{summary()}, which
+keeps the formatting identical to R's own. Multiple response models and
+\code{aov} objects print differently and are not supported.
+}
+\examples{
+slimSummary(lm(mpg ~ wt, data = mtcars))
+slimSummary(glm(am ~ wt, family = binomial, data = mtcars))
+
 }
